@@ -1,19 +1,14 @@
+#Mohamed Traore, Dec 2022
+#This script will download a playlist
+#Provide the playlist as argument, while calling the script
+
 from pytube import Playlist, YouTube
 from pytube.cli import on_progress
 import os, sys
 
-link = "https://www.youtube.com/playlist?list=PLGaQya5sgY3mtmFcsVkd5BYq8j1Hl-QTE"
-SAVE_PATH = "D:/Users/medtr/VSCode/pytube project/mp3/Salif Keita"
-
-def progress_function(chunk, file_handle, bytes_remaining):
-    filesize = chunk.filesize
-    current = ((filesize - bytes_remaining)/filesize)
-    percent = ('{0:.1f}').format(current*100)
-    progress = int(50*current)
-    status = '█' * progress + '-' * (50 - progress)
-    sys.stdout.write(' ↳ |{bar}| {percent}%\r'.format(bar=status, percent=percent))
-    sys.stdout.flush()
-
+#link = "https://www.youtube.com/playlist?list=PLGaQya5sgY3mtmFcsVkd5BYq8j1Hl-QTE"
+link = sys.argv[1]
+SAVE_PATH = "D:/Users/Music/mp3/Playlist"
 
 p = Playlist(link)
 n_tot_video = len(p.video_urls)
@@ -40,15 +35,12 @@ for i in range(n_tot_video):
         new_file = base + '.mp3'
         isFile = os.path.isfile(new_file)
         
-        while True :
-            if isFile :
+        while isFile :
                 base, ext = os.path.splitext(new_file)
                 base = base +  '#'
                 new_file = base +  '.mp3'
                 isFile = os.path.isfile(new_file)
-            else: 
-                 break
-
+        
         os.rename(out_file, new_file)
 
     # number of success
